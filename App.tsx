@@ -26,11 +26,8 @@ const App: React.FC = () => {
             if (typeof storedPrefs === 'string') {
                 return storedPrefs;
             }
-            const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
-            if (userMedia.matches) {
-                return 'dark';
-            }
         }
+        // Always default to 'light' if no preference is stored
         return 'light';
     });
 

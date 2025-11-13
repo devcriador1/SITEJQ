@@ -186,7 +186,7 @@ export const UsersGroupIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export const Logo = () => (
     <div className="flex flex-col items-start group">
         <span
-            className="text-5xl font-bold text-primary-dark group-hover:text-primary transition-colors duration-300 dark:text-primary-light dark:group-hover:text-light"
+            className="text-4xl sm:text-5xl font-bold text-primary-dark group-hover:text-primary transition-colors duration-300 dark:text-primary-light dark:group-hover:text-light"
             style={{ fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.08em' }}
         >
             ABA
@@ -205,7 +205,7 @@ export const Logo = () => (
 export const LogoLight = () => (
      <div className="flex flex-col items-start group">
         <span
-            className="text-5xl font-bold text-light group-hover:text-gray-300 transition-colors duration-300"
+            className="text-4xl sm:text-5xl font-bold text-light group-hover:text-gray-300 transition-colors duration-300"
             style={{ fontFamily: "'Poppins', sans-serif", letterSpacing: '-0.08em' }}
         >
             ABA
