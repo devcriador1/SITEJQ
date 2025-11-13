@@ -118,7 +118,7 @@ const Blog: React.FC = () => {
             </div>
             
             {totalPages > 1 && (
-                <div className="flex justify-center items-center space-x-2 sm:space-x-4">
+                <div className="flex justify-center items-center flex-wrap gap-2 sm:gap-4">
                     <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
@@ -127,7 +127,7 @@ const Blog: React.FC = () => {
                     >
                         &larr; Anterior
                     </button>
-                    <span className="text-sm sm:text-base text-gray-700 dark:text-stone-300 font-medium whitespace-nowrap">
+                    <span className="text-sm sm:text-base text-gray-700 dark:text-stone-300 font-medium">
                         Página {currentPage} de {totalPages}
                     </span>
                     <button

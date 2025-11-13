@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { MenuIcon, XIcon, Logo, SunIcon, MoonIcon } from './icons';
+import { MenuIcon, XIcon, Logo, SunIcon, MoonIcon, AiIcon } from './icons';
 import useScrollSpy from '../hooks/useScrollSpy';
 
 interface HeaderProps {
     sectionIds: string[];
     theme: string;
     toggleTheme: () => void;
+    openChat: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
+const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme, openChat }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const activeSection = useScrollSpy(sectionIds);
@@ -32,6 +33,11 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
     ];
 
     const WHATSAPP_LINK = "https://wa.me/5511954949734?text=Olá! Gostaria de saber mais sobre o Instituto São Joaquim.";
+
+    const handleOpenChatAndCloseMenu = () => {
+        openChat();
+        setIsMenuOpen(false);
+    }
 
     return (
         <header className={`fixed top-0 w-full z-30 bg-light/95 backdrop-blur-sm shadow-soft transition-all duration-300 dark:bg-dark-bg-card/90 dark:shadow-soft-lg dark:shadow-primary/5 ${isScrolled ? 'py-2' : 'py-4'}`}>
@@ -57,6 +63,10 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
                 <div className="hidden lg:flex items-center gap-4">
                     <button onClick={toggleTheme} aria-label="Toggle theme" className="text-dark dark:text-stone-300 hover:text-primary dark:hover:text-primary-light p-2 rounded-full transition-colors duration-300">
                         {theme === 'light' ? <MoonIcon className="w-6 h-6" /> : <SunIcon className="w-6 h-6" />}
+                    </button>
+                    <button onClick={openChat} className="flex items-center gap-2 bg-secondary/10 text-secondary-dark dark:bg-secondary/20 dark:text-secondary-light font-bold py-2 px-4 rounded-md hover:bg-secondary/20 dark:hover:bg-secondary/30 transition-colors duration-300">
+                        <AiIcon className="w-5 h-5" />
+                        <span>Fale com IA</span>
                     </button>
                      <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="bg-primary-dark text-white font-bold py-2 px-6 rounded-md hover:bg-dark dark:hover:bg-primary-dark/80 transition-colors duration-300">
                         Fale Conosco
@@ -84,7 +94,11 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
                                 {link.name}
                             </a>
                         ))}
-                         <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="bg-primary-dark text-white font-bold py-3 px-8 rounded-md hover:bg-dark transition-colors duration-300 w-auto mt-4" onClick={() => setIsMenuOpen(false)}>
+                        <button onClick={handleOpenChatAndCloseMenu} className="flex items-center gap-2 bg-secondary/10 text-secondary-dark dark:bg-secondary/20 dark:text-secondary-light font-bold py-3 px-8 rounded-md hover:bg-secondary/20 dark:hover:bg-secondary/30 transition-colors duration-300 w-auto mt-4">
+                            <AiIcon className="w-5 h-5" />
+                            <span>Fale com IA</span>
+                        </button>
+                         <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="bg-primary-dark text-white font-bold py-3 px-8 rounded-md hover:bg-dark transition-colors duration-300 w-auto" onClick={() => setIsMenuOpen(false)}>
                             Fale Conosco
                         </a>
                         <button onClick={toggleTheme} aria-label="Toggle theme" className="text-dark dark:text-stone-300 hover:text-primary dark:hover:text-primary-light p-2 rounded-full transition-colors duration-300 mt-2">

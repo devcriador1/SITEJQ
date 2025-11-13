@@ -94,7 +94,7 @@ const App: React.FC = () => {
 
     return (
         <div className="bg-stone-50 font-sans text-dark dark:bg-dark-bg dark:text-stone-300 transition-colors duration-300 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-stone-100 to-stone-50 dark:from-zinc-800/20 dark:to-dark-bg">
-            <Header sectionIds={sectionIds} theme={theme} toggleTheme={toggleTheme} />
+            <Header sectionIds={sectionIds} theme={theme} toggleTheme={toggleTheme} openChat={openChat} />
             <main>
                 <Hero theme={theme} />
                 <About />

@@ -4,6 +4,9 @@ import { GoogleGenAI, Chat, FunctionDeclaration, Type } from "@google/genai";
 // This prevents the entire app from crashing on startup if the API key is missing.
 let ai: GoogleGenAI | null = null;
 const getAi = () => {
+    if (!process.env.API_KEY) {
+        throw new Error("A chave de API do Gemini não foi configurada. Por favor, configure a variável de ambiente API_KEY.");
+    }
     if (!ai) {
         ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
     }
