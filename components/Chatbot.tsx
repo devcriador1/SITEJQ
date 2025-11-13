@@ -4,18 +4,20 @@ import type { Message } from '../types';
 import { createChat } from '../services/geminiService';
 import { XIcon, SendIcon, UserCircleIcon, AiIcon } from './icons';
 import MarkdownRenderer from './MarkdownRenderer';
+import { useNavigation } from '../contexts/NavigationContext';
 
 interface ChatbotProps {
     onClose: () => void;
-    onNavigate: (sectionId: string) => void;
 }
 
-const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
+const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
     const [chat, setChat] = useState<Chat | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const { navigate } = useNavigation();
     const [suggestions, setSuggestions] = useState([
         'O que é Terapia ABA?',
         'Quais os sinais do TEA?',
@@ -24,13 +26,24 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
     ]);
 
     useEffect(() => {
-        setChat(createChat());
-        setMessages([
-            {
-                role: 'model',
-                text: 'Olá! Sou o assistente virtual do Instituto São Joaquim. Como posso te ajudar hoje sobre o Transtorno do Espectro Autista (TEA)?'
-            }
-        ]);
+        try {
+            setChat(createChat());
+            setMessages([
+                {
+                    role: 'model',
+                    text: 'Olá! Sou o assistente virtual do Instituto São Joaquim. Como posso te ajudar hoje sobre o Transtorno do Espectro Autista (TEA)?'
+                }
+            ]);
+        } catch (error) {
+            console.error("Falha ao inicializar o chatbot:", error);
+            setIsError(true);
+            setMessages([
+                {
+                    role: 'model',
+                    text: 'Desculpe, o assistente virtual está temporariamente indisponível. Por favor, verifique a configuração e tente novamente mais tarde.'
+                }
+            ]);
+        }
     }, []);
     
     useEffect(() => {
@@ -44,7 +57,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
 
     const sendMessage = useCallback(async (messageText?: string) => {
         const currentInput = messageText || input;
-        if (!currentInput.trim() || !chat || isLoading) return;
+        if (!currentInput.trim() || !chat || isLoading || isError) return;
 
         if (suggestions.length > 0) {
             setSuggestions([]);
@@ -90,7 +103,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
                  const fc = functionCalls[0];
                 if (fc.name === 'navigateToSection') {
                     const { sectionId } = fc.args as { sectionId: string };
-                    onNavigate(sectionId);
+                    navigate(sectionId);
                 }
             }
         } catch (error) {
@@ -103,7 +116,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [chat, input, isLoading, onNavigate, suggestions]);
+    }, [chat, input, isLoading, navigate, suggestions, isError]);
 
     const handleSuggestionClick = (suggestion: string) => {
         setSuggestions([]);
@@ -148,7 +161,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
                 </div>
             </div>
 
-            {suggestions.length > 0 && (
+            {suggestions.length > 0 && !isError && (
                 <div className="p-3 border-t bg-white dark:bg-dark-bg-card dark:border-zinc-700">
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">Sugestões:</p>
                     <div className="flex flex-wrap gap-2">
@@ -172,11 +185,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        placeholder="Digite sua pergunta..."
+                        placeholder={isError ? "Assistente indisponível" : "Digite sua pergunta..."}
                         className="flex-1 px-4 py-2 border bg-stone-100 dark:bg-dark-bg dark:text-light dark:border-zinc-600 dark:placeholder-stone-400 border border-stone-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary/50 focus:bg-white dark:focus:bg-dark-bg transition-all outline-none"
-                        disabled={isLoading}
+                        disabled={isLoading || isError}
                     />
-                    <button onClick={handleSendClick} disabled={isLoading || !input.trim()} className="bg-accent text-white p-3 rounded-full hover:bg-accent-dark disabled:bg-gray-300 dark:disabled:bg-zinc-600 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent" aria-label="Enviar mensagem">
+                    <button onClick={handleSendClick} disabled={isLoading || !input.trim() || isError} className="bg-accent text-white p-3 rounded-full hover:bg-accent-dark disabled:bg-gray-300 dark:disabled:bg-zinc-600 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent" aria-label="Enviar mensagem">
                         <SendIcon className="w-5 h-5" />
                     </button>
                 </div>

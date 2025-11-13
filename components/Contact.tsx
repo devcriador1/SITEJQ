@@ -33,7 +33,7 @@ const InfoItem = ({ icon, text, label }: { icon: React.ReactElement<React.SVGPro
 
 const Contact: React.FC = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const WHATSAPP_NUMBER = '5511954949734';
+    const WHATSAPP_NUMBER = '5511948476525';
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -82,8 +82,8 @@ const Contact: React.FC = () => {
                     <div className="space-y-2 text-gray-700 dark:text-stone-300 flex flex-col justify-around flex-grow">
                         <ContactInfoItem 
                             icon={<LocationMarkerIcon />}
-                            href="https://www.google.com/maps/search/?api=1&query=Rua+Arezema+374+Bosque+da+Saude+SP"
-                            text="Rua Arezema, 374, Bosque da Saúde, SP"
+                            href="https://www.google.com/maps/search/?api=1&query=Rua+Guarema+374+Bosque+da+Saude+SP"
+                            text="Rua Guarema, 374, Bosque da Saúde, SP"
                             label="Endereço"
                         />
                          <ContactInfoItem 
@@ -94,8 +94,8 @@ const Contact: React.FC = () => {
                         />
                          <ContactInfoItem 
                             icon={<WhatsAppIcon />}
-                            href="https://wa.me/5511954949734"
-                            text="(11) 95494-9734"
+                            href="https://wa.me/5511948476525"
+                            text="(11) 94847-6525"
                             label="WhatsApp"
                         />
                          <ContactInfoItem 

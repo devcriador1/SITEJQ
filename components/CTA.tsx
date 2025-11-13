@@ -2,7 +2,7 @@ import React from 'react';
 import Section from './Section';
 
 const CTA: React.FC = () => {
-    const WHATSAPP_LINK = "https://wa.me/5511954949734?text=Olá! Gostaria de agendar uma conversa sobre os serviços do instituto.";
+    const WHATSAPP_LINK = "https://wa.me/5511948476525?text=Olá! Gostaria de agendar uma conversa sobre os serviços do instituto.";
 
     return (
         <Section id="cta" className="p-0">

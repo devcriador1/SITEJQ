@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MenuIcon, XIcon, Logo, SunIcon, MoonIcon } from './icons';
 import useScrollSpy from '../hooks/useScrollSpy';
+import { useNavigation } from '../contexts/NavigationContext';
 
 interface HeaderProps {
     sectionIds: string[];
@@ -12,6 +13,7 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const activeSection = useScrollSpy(sectionIds);
+    const { navigate } = useNavigation();
     
     useEffect(() => {
         const handleScroll = () => {
@@ -31,12 +33,22 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
         { name: 'Instagram', href: 'https://www.instagram.com/aba_institutosaojoaquim/', external: true },
     ];
 
-    const WHATSAPP_LINK = "https://wa.me/5511954949734?text=Olá! Gostaria de saber mais sobre o Instituto São Joaquim.";
+    const WHATSAPP_LINK = "https://wa.me/5511948476525?text=Olá! Gostaria de saber mais sobre o Instituto São Joaquim.";
+
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, link: typeof navLinks[0]) => {
+        if (!link.external && link.id) {
+            e.preventDefault();
+            navigate(link.id);
+            if(isMenuOpen) setIsMenuOpen(false);
+        } else if (isMenuOpen) {
+            setIsMenuOpen(false);
+        }
+    };
 
     return (
         <header className={`fixed top-0 w-full z-30 bg-light/95 backdrop-blur-sm shadow-soft transition-all duration-300 dark:bg-dark-bg-card/90 dark:shadow-soft-lg dark:shadow-primary/5 ${isScrolled ? 'py-2' : 'py-4'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center max-w-7xl">
-                <a href="#hero" className={`transition-transform duration-300 origin-left ${isScrolled ? 'scale-90' : 'scale-100'}`}>
+                <a href="#hero" onClick={(e) => { e.preventDefault(); navigate('hero'); }} className={`transition-transform duration-300 origin-left ${isScrolled ? 'scale-90' : 'scale-100'}`}>
                     <Logo />
                 </a>
 
@@ -44,7 +56,8 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
                     {navLinks.map((link) => (
                         <a 
                             key={link.name} 
-                            href={link.href} 
+                            href={link.href}
+                            onClick={(e) => handleNavClick(e, link)}
                             target={link.external ? '_blank' : '_self'} 
                             rel={link.external ? 'noopener noreferrer' : ''} 
                             className={`nav-link text-dark hover:text-primary transition-colors duration-300 font-medium dark:text-stone-300 dark:hover:text-primary-light ${activeSection === link.id ? 'active text-primary dark:text-primary-light' : ''}`}
@@ -76,10 +89,10 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
                             <a 
                                 key={link.name} 
                                 href={link.href} 
+                                onClick={(e) => handleNavClick(e, link)}
                                 target={link.external ? '_blank' : '_self'} 
                                 rel={link.external ? 'noopener noreferrer' : ''} 
                                 className="text-dark dark:text-stone-300 hover:text-primary dark:hover:text-primary-light transition-colors duration-300 font-medium text-lg" 
-                                onClick={() => setIsMenuOpen(false)}
                             >
                                 {link.name}
                             </a>

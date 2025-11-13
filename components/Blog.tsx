@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Section from './Section';
+import { useNavigation } from '../contexts/NavigationContext';
 
 const blogPosts = [
     {
@@ -74,6 +75,7 @@ const Blog: React.FC = () => {
     const [expandedPostIndex, setExpandedPostIndex] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 3;
+    const { navigate } = useNavigation();
 
     // Reset expanded post when changing pages
     useEffect(() => {
@@ -94,10 +96,7 @@ const Blog: React.FC = () => {
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber < 1 || pageNumber > totalPages) return;
         setCurrentPage(pageNumber);
-        const blogSection = document.getElementById('blog');
-        if (blogSection) {
-            blogSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        navigate('blog');
     }
 
     return (

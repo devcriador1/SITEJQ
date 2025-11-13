@@ -1,11 +1,14 @@
 import React from 'react';
 import NeuralNetworkCanvas from './NeuralNetworkCanvas';
+import { useNavigation } from '../contexts/NavigationContext';
 
 interface HeroProps {
     theme: string;
 }
 
 const Hero: React.FC<HeroProps> = ({ theme }) => {
+    const { navigate } = useNavigation();
+
     return (
         <section id="hero" className="relative h-screen flex items-center justify-center text-center bg-stone-50 dark:bg-dark-bg overflow-hidden">
             <NeuralNetworkCanvas theme={theme} />
@@ -18,6 +21,7 @@ const Hero: React.FC<HeroProps> = ({ theme }) => {
                 </p>
                 <a 
                     href="#method" 
+                    onClick={(e) => { e.preventDefault(); navigate('method'); }}
                     className="bg-accent text-white font-bold py-3 px-8 rounded-full hover:bg-accent-dark transition-transform transform hover:scale-105 duration-300 inline-block shadow-lg"
                 >
                     Conheça Nossa Abordagem

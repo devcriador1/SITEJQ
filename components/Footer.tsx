@@ -1,26 +1,34 @@
 import React from 'react';
 import { LogoLight, LocationMarkerIcon, PhoneIcon, WhatsAppIcon, MailIcon, InstagramIcon } from './icons';
+import { useNavigation } from '../contexts/NavigationContext';
 
 const Footer: React.FC = () => {
+    const { navigate } = useNavigation();
+
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+        e.preventDefault();
+        navigate(sectionId);
+    };
+
     const navLinks = [
-        { name: 'Sobre Nós', href: '#about' },
-        { name: 'Nosso Método', href: '#method' },
-        { name: 'Serviços', href: '#services' },
-        { name: 'Nossa Equipe', href: '#team' },
+        { name: 'Sobre Nós', href: '#about', id: 'about' },
+        { name: 'Nosso Método', href: '#method', id: 'method' },
+        { name: 'Serviços', href: '#services', id: 'services' },
+        { name: 'Nossa Equipe', href: '#team', id: 'team' },
     ];
 
      const resourceLinks = [
-        { name: 'Sinais e Diagnóstico', href: '#signs' },
-        { name: 'Blog & Recursos', href: '#blog' },
-        { name: 'Perguntas Frequentes', href: '#faq' },
-        { name: 'Nosso Espaço', href: '#gallery' },
+        { name: 'Sinais e Diagnóstico', href: '#signs', id: 'signs' },
+        { name: 'Blog & Recursos', href: '#blog', id: 'blog' },
+        { name: 'Perguntas Frequentes', href: '#faq', id: 'faq' },
+        { name: 'Nosso Espaço', href: '#gallery', id: 'gallery' },
     ];
 
     const contactInfo = [
         { 
             icon: <LocationMarkerIcon className="w-5 h-5" />, 
-            text: 'Rua Arezema, 374, Bosque da Saúde, SP', 
-            href: 'https://www.google.com/maps/search/?api=1&query=Rua+Arezema+374+Bosque+da+Saude+SP' 
+            text: 'Rua Guarema, 374, Bosque da Saúde, SP', 
+            href: 'https://www.google.com/maps/search/?api=1&query=Rua+Guarema+374+Bosque+da+Saude+SP' 
         },
         { 
             icon: <PhoneIcon className="w-5 h-5" />, 
@@ -29,8 +37,8 @@ const Footer: React.FC = () => {
         },
         { 
             icon: <WhatsAppIcon className="w-5 h-5" />, 
-            text: '(11) 95494-9734', 
-            href: 'https://wa.me/5511954949734' 
+            text: '(11) 94847-6525', 
+            href: 'https://wa.me/5511948476525' 
         },
         { 
             icon: <MailIcon className="w-5 h-5" />, 
@@ -47,7 +55,7 @@ const Footer: React.FC = () => {
         },
         {
             name: 'WhatsApp',
-            href: 'https://wa.me/5511954949734',
+            href: 'https://wa.me/5511948476525',
             icon: <WhatsAppIcon className="w-6 h-6" />
         }
     ]
@@ -58,7 +66,7 @@ const Footer: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* Coluna 1: Sobre */}
                     <div className="flex flex-col">
-                        <a href="#hero" className="mb-4">
+                        <a href="#hero" onClick={(e) => handleNavClick(e, 'hero')} className="mb-4">
                            <LogoLight />
                         </a>
                         <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
@@ -86,7 +94,7 @@ const Footer: React.FC = () => {
                         <ul className="space-y-3">
                             {navLinks.map(link => (
                                 <li key={link.name}>
-                                    <a href={link.href} className="text-gray-400 hover:text-white transition-colors duration-300">
+                                    <a href={link.href} onClick={(e) => handleNavClick(e, link.id)} className="text-gray-400 hover:text-white transition-colors duration-300">
                                         {link.name}
                                     </a>
                                 </li>
@@ -100,7 +108,7 @@ const Footer: React.FC = () => {
                         <ul className="space-y-3">
                             {resourceLinks.map(link => (
                                 <li key={link.name}>
-                                    <a href={link.href} className="text-gray-400 hover:text-white transition-colors duration-300">
+                                    <a href={link.href} onClick={(e) => handleNavClick(e, link.id)} className="text-gray-400 hover:text-white transition-colors duration-300">
                                         {link.name}
                                     </a>
                                 </li>
@@ -115,7 +123,7 @@ const Footer: React.FC = () => {
                             {contactInfo.map((item, index) => (
                                 <li key={index} className="flex items-start">
                                     <span className="flex-shrink-0 mt-1 text-primary-light">{item.icon}</span>
-                                    <a href={item.href} target={item.href.startsWith('http') ? '_blank' : '_self'} rel={item.href.startsWith('http') ? 'noopener noreferrer' : ''} className="ml-3 text-gray-400 hover:text-white transition-colors">
+                                    <a href={item.href} target={item.href.startsWith('http') || item.href.startsWith('tel') || item.href.startsWith('mailto') ? '_blank' : '_self'} rel={item.href.startsWith('http') ? 'noopener noreferrer' : ''} className="ml-3 text-gray-400 hover:text-white transition-colors">
                                         {item.text}
                                     </a>
                                 </li>

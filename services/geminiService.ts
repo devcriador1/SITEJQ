@@ -1,6 +1,16 @@
 import { GoogleGenAI, Chat, FunctionDeclaration, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// A instância da IA é inicializada de forma "preguiçosa" para evitar travamentos no carregamento.
+let ai: GoogleGenAI | null = null;
+
+function getAiInstance(): GoogleGenAI {
+    if (!ai) {
+        // Isso agora só será chamado quando o chat for criado pela primeira vez,
+        // prevenindo que o aplicativo trave no carregamento inicial se a API_KEY estiver ausente.
+        ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+    }
+    return ai;
+}
 
 const systemInstruction = `Você é um assistente virtual do Instituto São Joaquim, um centro especializado em Transtorno do Espectro Autista (TEA). Sua persona é a de um guia atencioso, empático e muito humano. Sua missão é acolher e orientar pais, cuidadores e todos que buscam informações, fazendo-os se sentirem compreendidos e seguros. Responda sempre em Português do Brasil.
 
@@ -39,7 +49,8 @@ const navigateToSectionDeclaration: FunctionDeclaration = {
 
 
 export function createChat(): Chat {
-  const chat = ai.chats.create({
+  const currentAi = getAiInstance();
+  const chat = currentAi.chats.create({
     model: 'gemini-2.5-flash',
     config: {
       systemInstruction: systemInstruction,
