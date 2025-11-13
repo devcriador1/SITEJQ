@@ -1,14 +1,6 @@
 import { GoogleGenAI, Chat, FunctionDeclaration, Type } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
-
-if (!API_KEY) {
-  // In a real app, you'd want to handle this more gracefully.
-  // For this environment, we assume the key is present.
-  console.warn("API_KEY environment variable not set. Using a placeholder.");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY || 'MISSING_API_KEY' });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 const systemInstruction = `Você é um assistente virtual do Instituto São Joaquim, um centro especializado em Transtorno do Espectro Autista (TEA). Sua persona é a de um guia atencioso, empático e muito humano. Sua missão é acolher e orientar pais, cuidadores e todos que buscam informações, fazendo-os se sentirem compreendidos e seguros. Responda sempre em Português do Brasil.
 
@@ -38,7 +30,7 @@ const navigateToSectionDeclaration: FunctionDeclaration = {
     properties: {
       sectionId: {
         type: Type.STRING,
-        description: 'O ID da seção para a qual navegar. IDs possíveis: hero, about, method, why-aba, signs, services, awareness, testimonials, gallery, team, blog, faq, contact.',
+        description: 'O ID da seção para a qual navegar. IDs possíveis: hero, about, method, why-aba, signs, services, testimonials, gallery, team, blog, faq, contact.',
       },
     },
     required: ['sectionId'],

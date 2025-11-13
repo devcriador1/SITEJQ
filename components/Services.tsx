@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Section from './Section';
-import { PuzzleIcon, MicIcon, HandIcon, BookIcon } from './icons';
+import { PuzzleIcon, MicIcon, HandIcon, BookIcon, AcademicCapIcon, UsersGroupIcon } from './icons';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 interface ServiceCardProps {
@@ -17,7 +17,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, ind
     return (
         <div
             ref={ref}
-            className={`bg-white p-6 md:p-8 rounded-xl shadow-soft text-center transition-all duration-500 ease-out group hover:shadow-soft-lg hover:-translate-y-2 relative overflow-hidden ${
+            className={`bg-light p-6 md:p-8 rounded-2xl border border-stone-100 shadow-soft text-center transition-all duration-500 ease-out group hover:shadow-soft-lg hover:-translate-y-2 relative overflow-hidden ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ transitionDelay: `${index * 100}ms` }}
@@ -30,8 +30,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, ind
                     </div>
                 </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-dark mb-2">{title}</h3>
-            <p className="text-sm md:text-base text-gray-600">{description}</p>
+            <h3 className="text-xl md:text-2xl font-bold text-dark mb-2">{title}</h3>
+            <p className="text-sm md:text-base text-gray-600 leading-relaxed">{description}</p>
         </div>
     );
 };
@@ -41,16 +41,18 @@ const Services: React.FC = () => {
         { title: 'Terapia ABA', description: 'Análise do Comportamento Aplicada para desenvolver habilidades sociais e de comunicação.', icon: <PuzzleIcon /> },
         { title: 'Fonoaudiologia', description: 'Foco na comunicação verbal e não-verbal, deglutição e linguagem.', icon: <MicIcon /> },
         { title: 'Terapia Ocupacional', description: 'Promove a autonomia nas atividades diárias e integração sensorial.', icon: <HandIcon /> },
-        { title: 'Psicopedagogia', description: 'Apoio no processo de aprendizagem e desenvolvimento cognitivo.', icon: <BookIcon /> }
+        { title: 'Psicopedagogia', description: 'Apoio no processo de aprendizagem e desenvolvimento cognitivo.', icon: <BookIcon /> },
+        { title: 'Orientação Parental', description: 'Capacitação e suporte para pais e cuidadores, fortalecendo o desenvolvimento da criança em casa.', icon: <AcademicCapIcon /> },
+        { title: 'Grupos de Habilidades Sociais', description: 'Ambiente estruturado para praticar a interação, comunicação e fazer amizades.', icon: <UsersGroupIcon /> }
     ];
     
     return (
-        <Section id="services" className="bg-light">
+        <Section id="services" className="bg-stone-50">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-dark">Nossos Serviços</h2>
-                <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Uma abordagem completa e integrada para o desenvolvimento pleno.</p>
+                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">Nossos Serviços</h2>
+                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">Uma abordagem completa e integrada para o desenvolvimento pleno.</p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {services.map((service, index) => <ServiceCard key={service.title} {...service} index={index} />)}
             </div>
         </Section>

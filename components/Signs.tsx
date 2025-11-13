@@ -1,6 +1,6 @@
 import React from 'react';
 import Section from './Section';
-import { SpeechBubbleIcon, UsersIcon, CogIcon } from './icons';
+import { SpeechBubbleIcon, UsersIcon, CogIcon, SparklesIcon, StarIcon, HandRaisedIcon } from './icons';
 
 interface SignCardProps {
     title: string;
@@ -9,14 +9,14 @@ interface SignCardProps {
 }
 
 const SignCard: React.FC<SignCardProps> = ({ title, description, icon }) => (
-    <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-secondary">
+    <div className="bg-light p-6 rounded-2xl shadow-soft border border-stone-100 h-full">
         <div className="flex items-center mb-4">
             <div className="p-3 bg-secondary-light rounded-full">
                 {icon}
             </div>
             <h3 className="text-xl font-bold text-dark ml-4">{title}</h3>
         </div>
-        <p className="text-gray-600">{description}</p>
+        <p className="text-gray-600 leading-relaxed">{description}</p>
     </div>
 );
 
@@ -37,16 +37,31 @@ const Signs: React.FC = () => {
             title: 'Comportamento', 
             description: 'Interesses intensos e restritos, adesão estrita a rotinas, movimentos repetitivos (estereotipias) e sensibilidade a estímulos sensoriais.', 
             icon: <CogIcon className="w-6 h-6 text-secondary-dark" /> 
+        },
+        {
+            title: 'Sensibilidades Sensoriais',
+            description: 'Reação intensa ou ausente a estímulos como sons, luzes, texturas ou toques, buscando ou evitando certas sensações de forma marcante.',
+            icon: <SparklesIcon className="w-6 h-6 text-secondary-dark" />
+        },
+        {
+            title: 'Interesses Focados',
+            description: 'Paixão profunda e específica por determinados temas ou objetos, dedicando-se a eles com grande intensidade e conhecimento.',
+            icon: <StarIcon className="w-6 h-6 text-secondary-dark" />
+        },
+        {
+            title: 'Dificuldades Motoras',
+            description: 'Desafios na coordenação motora fina (escrever, amarrar sapatos) ou grossa (correr, pular), podendo apresentar movimentos desajeitados.',
+            icon: <HandRaisedIcon className="w-6 h-6 text-secondary-dark" />
         }
     ];
     
     return (
         <Section id="signs" className="bg-light">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-dark">Sinais e Diagnóstico</h2>
-                <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Reconhecer os sinais precoces é o primeiro passo para buscar apoio. Lembre-se, um diagnóstico deve ser feito por um profissional.</p>
+                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">Sinais e Diagnóstico</h2>
+                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto leading-relaxed">Reconhecer os sinais precoces é o primeiro passo para buscar apoio. Lembre-se, um diagnóstico deve ser feito por um profissional.</p>
             </div>
-            <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {signs.map(sign => <SignCard key={sign.title} {...sign} />)}
             </div>
         </Section>

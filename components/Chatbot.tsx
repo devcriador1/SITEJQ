@@ -54,8 +54,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
         try {
             const result = await chat.sendMessage({ message: currentInput });
             
-            // FIX: The result from `chat.sendMessage` is the `GenerateContentResponse` itself.
-            // There is no nested `.response` property. Access properties like `text` and `functionCalls` directly.
             const functionCalls = result.functionCalls;
             const text = result.text;
 
@@ -103,21 +101,21 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
                 </button>
             </header>
             
-            <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+            <div className="flex-1 p-4 overflow-y-auto bg-stone-50">
                 <div className="space-y-4">
                     {messages.map((msg, index) => (
                         <div key={index} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'justify-end' : ''}`}>
-                            {msg.role === 'model' && <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-teal-600 flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>}
-                            <div className={`max-w-xs md:max-w-sm px-4 py-2.5 rounded-2xl ${msg.role === 'user' ? 'bg-secondary text-white rounded-br-none shadow-soft' : 'bg-white text-dark rounded-bl-none shadow-soft'}`}>
+                            {msg.role === 'model' && <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary-dark flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>}
+                            <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${msg.role === 'user' ? 'bg-secondary text-white rounded-br-none shadow-soft' : 'bg-white text-dark rounded-bl-none shadow-soft'}`}>
                                <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
                             </div>
-                            {msg.role === 'user' && <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center"><UserCircleIcon className="w-6 h-6 text-gray-500" /></div>}
+                            {msg.role === 'user' && <div className="w-8 h-8 rounded-full bg-stone-100 border border-stone-200 flex-shrink-0 flex items-center justify-center"><UserCircleIcon className="w-6 h-6 text-gray-500" /></div>}
                         </div>
                     ))}
                      {isLoading && (
                         <div className="flex items-start gap-3">
-                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-teal-600 flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>
-                            <div className="max-w-xs md:max-w-sm px-4 py-3 rounded-2xl bg-white text-dark rounded-bl-none shadow-soft">
+                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary-dark flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>
+                            <div className="px-4 py-3 rounded-2xl bg-white text-dark rounded-bl-none shadow-soft">
                                 <div className="flex items-center space-x-1.5">
                                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-75"></span>
                                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-150"></span>
@@ -155,10 +153,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder="Digite sua pergunta..."
-                        className="flex-1 px-4 py-2 border bg-gray-100 rounded-full focus:ring-2 focus:ring-secondary/50 focus:outline-none focus:bg-white transition-all"
+                        className="flex-1 px-4 py-2 border bg-stone-100 rounded-full focus:ring-2 focus:ring-secondary/50 focus:outline-none focus:bg-white transition-all"
                         disabled={isLoading}
                     />
-                    <button onClick={handleSendClick} disabled={isLoading || !input.trim()} className="bg-accent text-white p-3 rounded-full hover:bg-amber-600 disabled:bg-gray-300 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent">
+                    <button onClick={handleSendClick} disabled={isLoading || !input.trim()} className="bg-accent text-white p-3 rounded-full hover:bg-accent-dark disabled:bg-gray-300 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent">
                         <SendIcon className="w-5 h-5" />
                     </button>
                 </div>

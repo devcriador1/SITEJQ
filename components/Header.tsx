@@ -19,7 +19,7 @@ const Header: React.FC = () => {
     ];
 
     return (
-        <header className="fixed top-0 w-full z-30 transition-colors duration-300 bg-light shadow-soft">
+        <header className="fixed top-0 w-full z-30 bg-light shadow-soft">
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
                 <a href="#hero">
                     <Logo />

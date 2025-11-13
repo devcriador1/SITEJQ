@@ -15,7 +15,7 @@ const Section: React.FC<SectionProps> = ({ id, children, className = '' }) => {
         <section
             id={id}
             ref={ref}
-            className={`py-16 md:py-24 transition-all duration-700 ease-out ${className} ${
+            className={`py-20 md:py-28 transition-all duration-700 ease-out relative ${className} ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
         >

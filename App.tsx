@@ -13,7 +13,6 @@ import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 import { ChatBubbleIcon, QuestionMarkCircleIcon } from './components/icons';
 import Signs from './components/Signs';
-import AwarenessBanner from './components/AwarenessBanner';
 import Testimonials from './components/Testimonials';
 import Blog from './components/Blog';
 import CTA from './components/CTA';
@@ -66,7 +65,7 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="bg-light font-sans text-dark">
+        <div className="bg-stone-50 font-sans text-dark">
             <Header />
             <main>
                 <Hero />
@@ -75,7 +74,6 @@ const App: React.FC = () => {
                 <WhyABA />
                 <Signs />
                 <Services />
-                <AwarenessBanner />
                 <Testimonials />
                 <Gallery />
                 <Team />
@@ -96,10 +94,10 @@ const App: React.FC = () => {
                 )}
                 <button
                     onClick={openChat}
-                    className="relative bg-secondary text-white p-4 rounded-full shadow-lg hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-transform transform hover:scale-110"
+                    className="relative bg-accent text-white p-4 rounded-full shadow-lg hover:bg-accent-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent transition-transform transform hover:scale-110"
                     aria-label="Abrir chat de atendimento inteligente"
                 >
-                    <span className="absolute inset-0 rounded-full bg-secondary animate-pulse-glow opacity-75"></span>
+                    <span className="absolute inset-0 rounded-full bg-accent animate-pulse-glow opacity-75"></span>
                     <ChatBubbleIcon className="relative w-8 h-8" />
                 </button>
             </div>

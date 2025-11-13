@@ -10,7 +10,7 @@ interface FaqItemProps {
 const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-        <div className="border-b">
+        <div className="border-b border-stone-100">
             <button onClick={() => setIsOpen(!isOpen)} className="w-full text-left py-4 flex justify-between items-center focus:outline-none group">
                 <span className="text-lg font-medium text-dark group-hover:text-primary transition-colors">{question}</span>
                 <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
@@ -19,7 +19,7 @@ const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
             </button>
              <div className={`grid transition-all duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                 <div className="overflow-hidden">
-                    <p className="pb-4 text-gray-600">{answer}</p>
+                    <p className="pb-4 text-gray-600 leading-relaxed">{answer}</p>
                 </div>
             </div>
         </div>
@@ -62,12 +62,12 @@ const FAQ: React.FC = () => {
         }
     ];
     return (
-        <Section id="faq" className="bg-light">
+        <Section id="faq" className="bg-stone-50">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-dark">Perguntas Frequentes</h2>
-                <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Tirando suas dúvidas sobre o TEA e nossas abordagens.</p>
+                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">Perguntas Frequentes</h2>
+                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">Tirando suas dúvidas sobre o TEA e nossas abordagens.</p>
             </div>
-            <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <div className="max-w-3xl mx-auto bg-light p-6 rounded-2xl shadow-soft border border-stone-100">
                 {faqs.map((faq, index) => <FaqItem key={index} {...faq} />)}
             </div>
         </Section>

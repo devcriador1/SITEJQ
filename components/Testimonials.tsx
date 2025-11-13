@@ -8,10 +8,10 @@ interface TestimonialCardProps {
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author }) => (
-    <div className="bg-white p-8 rounded-xl shadow-soft h-full flex flex-col relative">
+    <div className="bg-light p-8 rounded-2xl shadow-soft border border-stone-100 h-full flex flex-col relative">
         <QuoteIcon className="absolute top-4 left-6 w-12 h-12 text-primary/10" />
         <div className="relative z-10">
-            <p className="text-gray-700 italic flex-grow mb-4">"{quote}"</p>
+            <p className="text-gray-700 italic flex-grow mb-4 leading-relaxed">"{quote}"</p>
             <p className="text-right font-semibold text-primary">- {author}</p>
         </div>
     </div>
@@ -34,10 +34,10 @@ const Testimonials: React.FC = () => {
     ];
     
     return (
-        <Section id="testimonials" className="bg-white">
+        <Section id="testimonials" className="bg-light">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-dark">O que as Famílias Dizem</h2>
-                <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">O impacto real do nosso trabalho, contado por quem mais importa.</p>
+                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">O que as Famílias Dizem</h2>
+                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">O impacto real do nosso trabalho, contado por quem mais importa.</p>
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {testimonials.map((testimonial, index) => <TestimonialCard key={index} {...testimonial} />)}
