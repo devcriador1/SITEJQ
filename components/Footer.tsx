@@ -37,8 +37,8 @@ const Footer: React.FC = () => {
         },
         { 
             icon: <WhatsAppIcon className="w-5 h-5" />, 
-            text: '(11) 94847-6525', 
-            href: 'https://wa.me/5511948476525' 
+            text: '(11) 94847-6528', 
+            href: 'https://wa.me/5511948476528' 
         },
         { 
             icon: <MailIcon className="w-5 h-5" />, 
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
         },
         {
             name: 'WhatsApp',
-            href: 'https://wa.me/5511948476525',
+            href: 'https://wa.me/5511948476528',
             icon: <WhatsAppIcon className="w-6 h-6" />
         }
     ]

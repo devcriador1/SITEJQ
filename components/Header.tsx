@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { MenuIcon, XIcon, Logo, SunIcon, MoonIcon } from './icons';
 import useScrollSpy from '../hooks/useScrollSpy';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -9,7 +9,7 @@ interface HeaderProps {
     toggleTheme: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
+const Header = forwardRef<HTMLElement, HeaderProps>(({ sectionIds, theme, toggleTheme }, ref) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const activeSection = useScrollSpy(sectionIds);
@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
         { name: 'Instagram', href: 'https://www.instagram.com/aba_institutosaojoaquim/', external: true },
     ];
 
-    const WHATSAPP_LINK = "https://wa.me/5511948476525?text=Olá! Gostaria de saber mais sobre o Instituto São Joaquim.";
+    const WHATSAPP_LINK = "https://wa.me/5511948476528?text=Olá! Gostaria de saber mais sobre o Instituto São Joaquim.";
 
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, link: typeof navLinks[0]) => {
         if (!link.external && link.id) {
@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
     };
 
     return (
-        <header className={`fixed top-0 w-full z-30 bg-light/95 backdrop-blur-sm shadow-soft transition-all duration-300 dark:bg-dark-bg-card/90 dark:shadow-soft-lg dark:shadow-primary/5 ${isScrolled ? 'py-2' : 'py-4'}`}>
+        <header ref={ref} className={`fixed top-0 w-full z-30 bg-light/95 backdrop-blur-sm shadow-soft transition-all duration-300 dark:bg-dark-bg-card/90 dark:shadow-soft-lg dark:shadow-primary/5 ${isScrolled ? 'py-2' : 'py-4'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center max-w-7xl">
                 <a href="#hero" onClick={(e) => { e.preventDefault(); navigate('hero'); }} className={`transition-transform duration-300 origin-left ${isScrolled ? 'scale-90' : 'scale-100'}`}>
                     <Logo />
@@ -108,6 +108,6 @@ const Header: React.FC<HeaderProps> = ({ sectionIds, theme, toggleTheme }) => {
             )}
         </header>
     );
-};
+});
 
 export default Header;

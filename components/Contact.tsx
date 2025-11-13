@@ -33,7 +33,7 @@ const InfoItem = ({ icon, text, label }: { icon: React.ReactElement<React.SVGPro
 
 const Contact: React.FC = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const WHATSAPP_NUMBER = '5511948476525';
+    const WHATSAPP_NUMBER = '5511948476528';
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -94,8 +94,8 @@ const Contact: React.FC = () => {
                         />
                          <ContactInfoItem 
                             icon={<WhatsAppIcon />}
-                            href="https://wa.me/5511948476525"
-                            text="(11) 94847-6525"
+                            href="https://wa.me/5511948476528"
+                            text="(11) 94847-6528"
                             label="WhatsApp"
                         />
                          <ContactInfoItem 

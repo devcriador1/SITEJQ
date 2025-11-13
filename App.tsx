@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -34,6 +34,7 @@ const App: React.FC = () => {
         }
         return 'light';
     });
+    const headerRef = useRef<HTMLElement>(null);
 
 
     const toggleTheme = () => {
@@ -80,7 +81,7 @@ const App: React.FC = () => {
         };
     }, [showChatTooltip]);
 
-    const handleNavigation = (sectionId: string) => {
+    const handleNavigation = useCallback((sectionId: string) => {
         const section = document.getElementById(sectionId);
 
         if (sectionId === 'hero') {
@@ -90,8 +91,7 @@ const App: React.FC = () => {
         }
 
         if (section) {
-            const header = document.querySelector('header');
-            const headerHeight = header ? header.offsetHeight : 80; // Fallback
+            const headerHeight = headerRef.current ? headerRef.current.offsetHeight : 80; // Use ref for accurate height
             const sectionTop = section.getBoundingClientRect().top + window.scrollY;
             
             window.scrollTo({
@@ -103,7 +103,11 @@ const App: React.FC = () => {
         } else {
             console.warn(`Section with id "${sectionId}" not found.`);
         }
-    };
+    }, [setIsChatOpen]);
+
+    const navigationContextValue = useMemo(() => ({
+        navigate: handleNavigation
+    }), [handleNavigation]);
     
     const openChat = () => {
         setIsChatOpen(true);
@@ -111,9 +115,9 @@ const App: React.FC = () => {
     }
 
     return (
-        <NavigationProvider value={{ navigate: handleNavigation }}>
+        <NavigationProvider value={navigationContextValue}>
             <div className="bg-stone-50 font-sans text-dark dark:bg-dark-bg dark:text-stone-300 transition-colors duration-300 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-stone-100 to-stone-50 dark:from-zinc-800/20 dark:to-dark-bg">
-                <Header sectionIds={sectionIds} theme={theme} toggleTheme={toggleTheme} />
+                <Header ref={headerRef} sectionIds={sectionIds} theme={theme} toggleTheme={toggleTheme} />
                 <main>
                     <Hero theme={theme} />
                     <About />
