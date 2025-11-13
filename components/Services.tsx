@@ -47,9 +47,18 @@ const Services: React.FC = () => {
     
     return (
         <Section id="services" className="bg-stone-50 dark:bg-dark-bg">
-            <div className="text-center mb-12">
-                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light">Nossos Serviços</h2>
-                <p className="text-xl text-gray-600 dark:text-stone-300 mt-4 max-w-3xl mx-auto">Uma abordagem completa e integrada para o desenvolvimento pleno.</p>
+            <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+                 <div className="text-center md:text-left">
+                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light">Nossos Serviços</h2>
+                    <p className="text-xl text-gray-600 dark:text-stone-300 mt-4 max-w-xl">Uma abordagem completa e integrada para o desenvolvimento pleno.</p>
+                </div>
+                 <div className="order-first md:order-last">
+                     <img 
+                        src="https://i.postimg.cc/LXGdy1Gj/Banner-para-Publicidade-Saude-Servico-de-Apoio-Gradiente-em-Roxo-Vivo-Verde-Branco.png" 
+                        alt="Banner ilustrativo dos serviços oferecidos pelo instituto" 
+                        className="rounded-2xl shadow-soft-lg w-full h-auto object-cover"
+                    />
+                </div>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {services.map((service, index) => <ServiceCard key={service.title} {...service} index={index} />)}

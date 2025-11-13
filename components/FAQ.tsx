@@ -12,7 +12,7 @@ const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
     return (
         <div className="border-b border-stone-100 dark:border-zinc-700">
             <button onClick={() => setIsOpen(!isOpen)} className="w-full text-left py-4 flex justify-between items-center focus:outline-none group">
-                <span className="text-lg font-medium text-dark dark:text-light group-hover:text-primary dark:group-hover:text-primary-light transition-colors">{question}</span>
+                <span className="text-base sm:text-lg font-medium text-dark dark:text-light group-hover:text-primary dark:group-hover:text-primary-light transition-colors">{question}</span>
                 <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                    <svg className="w-6 h-6 text-primary dark:text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>

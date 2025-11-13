@@ -118,22 +118,22 @@ const Blog: React.FC = () => {
             </div>
             
             {totalPages > 1 && (
-                <div className="flex justify-center items-center space-x-4">
+                <div className="flex justify-center items-center space-x-2 sm:space-x-4">
                     <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-4 py-2 bg-light dark:bg-dark-bg-card border border-stone-200 dark:border-zinc-600 rounded-md text-dark dark:text-light font-medium hover:bg-stone-100 dark:hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 sm:px-4 py-2 bg-light dark:bg-dark-bg-card border border-stone-200 dark:border-zinc-600 rounded-md text-sm sm:text-base text-dark dark:text-light font-medium hover:bg-stone-100 dark:hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         aria-label="Página anterior"
                     >
                         &larr; Anterior
                     </button>
-                    <span className="text-gray-700 dark:text-stone-300 font-medium">
+                    <span className="text-sm sm:text-base text-gray-700 dark:text-stone-300 font-medium whitespace-nowrap">
                         Página {currentPage} de {totalPages}
                     </span>
                     <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-4 py-2 bg-light dark:bg-dark-bg-card border border-stone-200 dark:border-zinc-600 rounded-md text-dark dark:text-light font-medium hover:bg-stone-100 dark:hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="px-3 sm:px-4 py-2 bg-light dark:bg-dark-bg-card border border-stone-200 dark:border-zinc-600 rounded-md text-sm sm:text-base text-dark dark:text-light font-medium hover:bg-stone-100 dark:hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         aria-label="Próxima página"
                     >
                         Próxima &rarr;
