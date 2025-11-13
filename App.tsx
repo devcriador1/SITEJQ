@@ -20,6 +20,37 @@ import CTA from './components/CTA';
 const App: React.FC = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [showChatTooltip, setShowChatTooltip] = useState(false);
+    const [theme, setTheme] = useState(() => {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            const storedPrefs = window.localStorage.getItem('theme');
+            if (typeof storedPrefs === 'string') {
+                return storedPrefs;
+            }
+            const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
+            if (userMedia.matches) {
+                return 'dark';
+            }
+        }
+        return 'light';
+    });
+
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+    };
+
+    useEffect(() => {
+        const root = window.document.documentElement;
+        const isDark = theme === 'dark';
+
+        root.classList.remove(isDark ? 'light' : 'dark');
+        root.classList.add(theme);
+
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const sectionIds = ['hero', 'about', 'method', 'why-aba', 'signs', 'services', 'testimonials', 'gallery', 'team', 'blog', 'faq', 'contact'];
 
     // Efeito para MOSTRAR o tooltip
     useEffect(() => {
@@ -65,10 +96,10 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="bg-stone-50 font-sans text-dark">
-            <Header />
+        <div className="bg-stone-50 font-sans text-dark dark:bg-dark-bg dark:text-stone-300 transition-colors duration-300 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-stone-100 to-stone-50 dark:from-zinc-800/20 dark:to-dark-bg">
+            <Header sectionIds={sectionIds} theme={theme} toggleTheme={toggleTheme} />
             <main>
-                <Hero />
+                <Hero theme={theme} />
                 <About />
                 <Method />
                 <WhyABA />
@@ -86,10 +117,10 @@ const App: React.FC = () => {
 
             <div className="fixed bottom-5 right-5 z-40 group">
                  {showChatTooltip && !isChatOpen && (
-                    <div className="absolute bottom-full right-0 mb-3 w-max bg-white text-dark rounded-lg px-4 py-2.5 shadow-soft-lg animate-fade-in-up-subtle flex items-center space-x-2.5">
+                    <div className="absolute bottom-full right-0 mb-3 w-max bg-white dark:bg-dark-bg-card dark:text-light rounded-lg px-4 py-2.5 shadow-soft-lg animate-fade-in-up-subtle flex items-center space-x-2.5">
                         <QuestionMarkCircleIcon className="w-6 h-6 text-primary"/>
                         <span className="text-sm font-medium">Tem alguma dúvida?</span>
-                        <div className="absolute right-4 -bottom-1 w-2 h-2 bg-white transform rotate-45"></div>
+                        <div className="absolute right-4 -bottom-1 w-2 h-2 bg-white dark:bg-dark-bg-card transform rotate-45"></div>
                     </div>
                 )}
                 <button

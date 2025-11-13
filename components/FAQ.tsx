@@ -10,16 +10,16 @@ interface FaqItemProps {
 const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-        <div className="border-b border-stone-100">
+        <div className="border-b border-stone-100 dark:border-zinc-700">
             <button onClick={() => setIsOpen(!isOpen)} className="w-full text-left py-4 flex justify-between items-center focus:outline-none group">
-                <span className="text-lg font-medium text-dark group-hover:text-primary transition-colors">{question}</span>
+                <span className="text-lg font-medium text-dark dark:text-light group-hover:text-primary dark:group-hover:text-primary-light transition-colors">{question}</span>
                 <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-                   <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                   <svg className="w-6 h-6 text-primary dark:text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </button>
              <div className={`grid transition-all duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                 <div className="overflow-hidden">
-                    <p className="pb-4 text-gray-600 leading-relaxed">{answer}</p>
+                    <p className="pb-4 text-gray-600 dark:text-stone-300 leading-relaxed">{answer}</p>
                 </div>
             </div>
         </div>
@@ -62,12 +62,12 @@ const FAQ: React.FC = () => {
         }
     ];
     return (
-        <Section id="faq" className="bg-stone-50">
+        <Section id="faq" className="bg-stone-50 dark:bg-dark-bg">
             <div className="text-center mb-12">
-                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">Perguntas Frequentes</h2>
-                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">Tirando suas dúvidas sobre o TEA e nossas abordagens.</p>
+                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light">Perguntas Frequentes</h2>
+                <p className="text-xl text-gray-600 dark:text-stone-300 mt-4 max-w-3xl mx-auto">Tirando suas dúvidas sobre o TEA e nossas abordagens.</p>
             </div>
-            <div className="max-w-3xl mx-auto bg-light p-6 rounded-2xl shadow-soft border border-stone-100">
+            <div className="max-w-3xl mx-auto bg-light dark:bg-dark-bg-card p-6 rounded-2xl shadow-soft border border-stone-100 dark:border-zinc-700">
                 {faqs.map((faq, index) => <FaqItem key={index} {...faq} />)}
             </div>
         </Section>

@@ -9,14 +9,14 @@ interface SignCardProps {
 }
 
 const SignCard: React.FC<SignCardProps> = ({ title, description, icon }) => (
-    <div className="bg-light p-6 rounded-2xl shadow-soft border border-stone-100 h-full">
+    <div className="bg-light dark:bg-dark-bg-card p-6 rounded-2xl shadow-soft border border-stone-100 dark:border-zinc-700 h-full">
         <div className="flex items-center mb-4">
             <div className="p-3 bg-secondary-light rounded-full">
                 {icon}
             </div>
-            <h3 className="text-xl font-bold text-dark ml-4">{title}</h3>
+            <h3 className="text-xl font-bold text-dark dark:text-light ml-4">{title}</h3>
         </div>
-        <p className="text-gray-600 leading-relaxed">{description}</p>
+        <p className="text-gray-600 dark:text-stone-300 leading-relaxed">{description}</p>
     </div>
 );
 
@@ -56,10 +56,10 @@ const Signs: React.FC = () => {
     ];
     
     return (
-        <Section id="signs" className="bg-light">
+        <Section id="signs" className="bg-light dark:bg-dark-bg-card">
             <div className="text-center mb-12">
-                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">Sinais e Diagnóstico</h2>
-                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto leading-relaxed">Reconhecer os sinais precoces é o primeiro passo para buscar apoio. Lembre-se, um diagnóstico deve ser feito por um profissional.</p>
+                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light">Sinais e Diagnóstico</h2>
+                <p className="text-xl text-gray-600 dark:text-stone-300 mt-4 max-w-3xl mx-auto leading-relaxed">Reconhecer os sinais precoces é o primeiro passo para buscar apoio. Lembre-se, um diagnóstico deve ser feito por um profissional.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {signs.map(sign => <SignCard key={sign.title} {...sign} />)}

@@ -3,11 +3,11 @@ import Section from './Section';
 
 const Method: React.FC = () => {
     return (
-        <Section id="method" className="bg-stone-50">
+        <Section id="method" className="bg-stone-50 dark:bg-dark-bg">
             <div className="grid md:grid-cols-2 gap-12 items-center">
                 <div className="order-2 md:order-1 text-center md:text-left">
-                    <h2 className="text-4xl md:text-5xl font-bold text-dark mb-4">Nosso Método</h2>
-                    <p className="text-xl text-gray-600 leading-relaxed">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light mb-4">Nosso Método</h2>
+                    <p className="text-xl text-gray-600 dark:text-stone-300 leading-relaxed">
                         Nossa abordagem é centrada na criança, utilizando práticas baseadas em evidências para promover o desenvolvimento e a autonomia. Cada plano terapêutico é individualizado, construído a partir de uma avaliação detalhada e em constante colaboração com a família.
                     </p>
                 </div>

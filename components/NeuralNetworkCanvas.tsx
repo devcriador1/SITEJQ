@@ -1,6 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 
-const NeuralNetworkCanvas: React.FC = () => {
+interface CanvasProps {
+    theme: string;
+}
+
+const NeuralNetworkCanvas: React.FC<CanvasProps> = ({ theme }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const mouse = useRef({
         x: null as number | null,
@@ -17,9 +21,7 @@ const NeuralNetworkCanvas: React.FC = () => {
         
         let animationFrameId: number;
         let particles: Particle[] = [];
-        const particleColor = '#855d51'; // Primary color
-        const particleHighlightColor = '#a98b80'; // Primary-light color
-
+        
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -79,7 +81,7 @@ const NeuralNetworkCanvas: React.FC = () => {
                 this.y += this.speedY;
             }
 
-            draw() {
+            draw(particleColor: string, particleHighlightColor: string) {
                 if (!ctx) return;
                 let currentSize = this.size;
                 let currentColor = particleColor;
@@ -109,7 +111,7 @@ const NeuralNetworkCanvas: React.FC = () => {
             }
         };
 
-        const connect = () => {
+        const connect = (lineColor: string, mouseLineColor: string) => {
             if (!ctx) return;
             // Particle to particle connections
             for (let a = 0; a < particles.length; a++) {
@@ -119,7 +121,7 @@ const NeuralNetworkCanvas: React.FC = () => {
                     
                     if (distance < (canvas.width / 7) * (canvas.height / 7)) {
                         const opacityValue = 1 - (distance / 20000);
-                        ctx.strokeStyle = `rgba(133, 93, 81, ${opacityValue})`;
+                        ctx.strokeStyle = lineColor.replace('${opacityValue}', String(opacityValue));
                         ctx.lineWidth = 0.5;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
@@ -137,7 +139,7 @@ const NeuralNetworkCanvas: React.FC = () => {
                     const distance = Math.sqrt(dx*dx + dy*dy);
                     if(distance < mouse.current.radius * 1.5) {
                         const opacityValue = 1 - (distance / (mouse.current.radius * 1.5));
-                        ctx.strokeStyle = `rgba(169, 139, 128, ${opacityValue})`; // Primary-light with opacity
+                        ctx.strokeStyle = mouseLineColor.replace('${opacityValue}', String(opacityValue));
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(mouse.current.x, mouse.current.y);
@@ -150,32 +152,41 @@ const NeuralNetworkCanvas: React.FC = () => {
 
         const animate = () => {
             if (!ctx) return;
+            
+            const isDark = theme === 'dark';
+            const particleColor = isDark ? '#f5f5f4' : '#855d51'; // stone-100 / primary
+            const particleHighlightColor = '#a98b80'; // primary-light (accent color)
+            const lineColor = isDark ? 'rgba(245, 245, 244, ${opacityValue})' : 'rgba(133, 93, 81, ${opacityValue})';
+            const mouseLineColor = 'rgba(169, 139, 128, ${opacityValue})'; // primary-light
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(particle => {
                 particle.update();
-                particle.draw();
+                particle.draw(particleColor, particleHighlightColor);
             });
-            connect();
+            connect(lineColor, mouseLineColor);
             animationFrameId = requestAnimationFrame(animate);
         };
 
         init();
         animate();
 
-        window.addEventListener('resize', () => {
+        const handleResize = () => {
             resizeCanvas();
             init();
-        });
+        }
+
+        window.addEventListener('resize', handleResize);
 
         return () => {
             window.cancelAnimationFrame(animationFrameId);
-            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseleave', handleMouseLeave);
         };
-    }, []);
+    }, [theme]);
 
-    return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full opacity-30" />;
+    return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full opacity-30 dark:opacity-40" />;
 };
 
 export default NeuralNetworkCanvas;

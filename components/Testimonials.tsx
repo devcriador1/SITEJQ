@@ -1,6 +1,6 @@
 import React from 'react';
 import Section from './Section';
-import { QuoteIcon } from './icons';
+import { QuoteIcon, UserCircleIcon } from './icons';
 
 interface TestimonialCardProps {
     quote: string;
@@ -8,11 +8,14 @@ interface TestimonialCardProps {
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author }) => (
-    <div className="bg-light p-8 rounded-2xl shadow-soft border border-stone-100 h-full flex flex-col relative">
-        <QuoteIcon className="absolute top-4 left-6 w-12 h-12 text-primary/10" />
-        <div className="relative z-10">
-            <p className="text-gray-700 italic flex-grow mb-4 leading-relaxed">"{quote}"</p>
-            <p className="text-right font-semibold text-primary">- {author}</p>
+    <div className="bg-light dark:bg-dark-bg-card p-8 rounded-2xl shadow-soft border border-stone-100 dark:border-zinc-700 h-full flex flex-col relative group">
+        <QuoteIcon className="absolute top-6 left-6 w-16 h-16 text-primary/5 dark:text-primary-light/5 transition-transform duration-300 group-hover:scale-110" />
+        <div className="relative z-10 flex flex-col flex-grow">
+            <p className="text-gray-700 dark:text-stone-300 italic flex-grow mb-6 leading-relaxed">"{quote}"</p>
+            <div className="flex items-center justify-end">
+                <UserCircleIcon className="w-8 h-8 text-primary-light mr-3"/>
+                <p className="font-semibold text-primary dark:text-primary-light text-right">- {author}</p>
+            </div>
         </div>
     </div>
 );
@@ -34,12 +37,12 @@ const Testimonials: React.FC = () => {
     ];
     
     return (
-        <Section id="testimonials" className="bg-light">
+        <Section id="testimonials" className="bg-light dark:bg-dark-bg-card">
             <div className="text-center mb-12">
-                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">O que as Famílias Dizem</h2>
-                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">O impacto real do nosso trabalho, contado por quem mais importa.</p>
+                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light">Jornadas de Sucesso</h2>
+                <p className="text-xl text-gray-600 dark:text-stone-300 mt-4 max-w-3xl mx-auto">O impacto real do nosso trabalho, contado por quem mais importa.</p>
             </div>
-            <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => <TestimonialCard key={index} {...testimonial} />)}
             </div>
         </Section>

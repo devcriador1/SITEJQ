@@ -1,15 +1,19 @@
 import React from 'react';
 import NeuralNetworkCanvas from './NeuralNetworkCanvas';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+    theme: string;
+}
+
+const Hero: React.FC<HeroProps> = ({ theme }) => {
     return (
-        <section id="hero" className="relative h-screen flex items-center justify-center text-center bg-stone-50 overflow-hidden">
-            <NeuralNetworkCanvas />
+        <section id="hero" className="relative h-screen flex items-center justify-center text-center bg-stone-50 dark:bg-dark-bg overflow-hidden">
+            <NeuralNetworkCanvas theme={theme} />
             <div className="relative z-10 p-6 animate-fade-in">
-                <h1 className="text-5xl md:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 text-dark dark:text-light">
                     Desvendando o Potencial de Cada Criança
                 </h1>
-                <p className="text-lg md:text-2xl text-gray-700 max-w-3xl mx-auto mb-8">
+                <p className="text-lg md:text-2xl text-gray-700 dark:text-stone-300 max-w-3xl mx-auto mb-8">
                     Apoio especializado e humanizado para crianças no espectro autista (TEA) e suas famílias.
                 </p>
                 <a 

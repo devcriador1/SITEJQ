@@ -45,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
             <div ref={modalRef} className="relative">
                 <button 
                     onClick={onClose} 
-                    className="absolute -top-3 -right-3 bg-white text-dark p-2 rounded-full shadow-lg hover:bg-gray-200 transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+                    className="absolute -top-3 -right-3 bg-white text-dark dark:bg-zinc-700 dark:text-light p-2 rounded-full shadow-lg hover:bg-gray-200 dark:hover:bg-zinc-600 transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
                     aria-label="Close modal"
                 >
                     <XIcon className="w-5 h-5" />

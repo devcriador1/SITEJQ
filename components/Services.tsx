@@ -17,21 +17,20 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, ind
     return (
         <div
             ref={ref}
-            className={`bg-light p-6 md:p-8 rounded-2xl border border-stone-100 shadow-soft text-center transition-all duration-500 ease-out group hover:shadow-soft-lg hover:-translate-y-2 relative overflow-hidden ${
+            className={`bg-light dark:bg-dark-bg-card p-6 md:p-8 rounded-2xl border border-stone-100 dark:border-zinc-700 shadow-soft text-center transition-all duration-500 ease-out group hover:shadow-glow-secondary hover:-translate-y-2 relative overflow-hidden ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ transitionDelay: `${index * 100}ms` }}
         >
-            <div className="relative inline-block mb-5">
-                <div className="absolute -inset-2 bg-gradient-to-br from-secondary/20 to-secondary-light/20 rounded-full blur opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300"></div>
+             <div className="relative inline-block mb-5">
                 <div className="relative inline-block p-4 bg-secondary-light rounded-full transition-all duration-300 group-hover:scale-110">
                     <div className="h-8 w-8 text-secondary-dark transition-colors duration-300">
                         {icon}
                     </div>
                 </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-dark mb-2">{title}</h3>
-            <p className="text-sm md:text-base text-gray-600 leading-relaxed">{description}</p>
+            <h3 className="text-xl md:text-2xl font-bold text-dark dark:text-light mb-2">{title}</h3>
+            <p className="text-sm md:text-base text-gray-600 dark:text-stone-300 leading-relaxed">{description}</p>
         </div>
     );
 };
@@ -47,10 +46,10 @@ const Services: React.FC = () => {
     ];
     
     return (
-        <Section id="services" className="bg-stone-50">
+        <Section id="services" className="bg-stone-50 dark:bg-dark-bg">
             <div className="text-center mb-12">
-                 <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary animate-background-pan bg-200%">Nossos Serviços</h2>
-                <p className="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">Uma abordagem completa e integrada para o desenvolvimento pleno.</p>
+                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-dark dark:text-light">Nossos Serviços</h2>
+                <p className="text-xl text-gray-600 dark:text-stone-300 mt-4 max-w-3xl mx-auto">Uma abordagem completa e integrada para o desenvolvimento pleno.</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {services.map((service, index) => <ServiceCard key={service.title} {...service} index={index} />)}

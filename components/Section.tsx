@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import React from 'react';
 
 interface SectionProps {
     id: string;
@@ -8,18 +7,12 @@ interface SectionProps {
 }
 
 const Section: React.FC<SectionProps> = ({ id, children, className = '' }) => {
-    const ref = useRef<HTMLElement>(null);
-    const isVisible = useIntersectionObserver(ref, { threshold: 0.1, triggerOnce: true });
-
     return (
         <section
             id={id}
-            ref={ref}
-            className={`py-20 md:py-28 transition-all duration-700 ease-out relative ${className} ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
+            className={`py-16 md:py-24 relative ${className}`}
         >
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto px-6 max-w-7xl">
                 {children}
             </div>
         </section>
