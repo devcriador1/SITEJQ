@@ -3,6 +3,7 @@ import type { Chat } from '@google/genai';
 import type { Message } from '../types';
 import { createChat } from '../services/geminiService';
 import { XIcon, SendIcon, UserCircleIcon, AiIcon } from './icons';
+import MarkdownRenderer from './MarkdownRenderer';
 
 interface ChatbotProps {
     onClose: () => void;
@@ -14,8 +15,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
     const [suggestions, setSuggestions] = useState([
         'O que é Terapia ABA?',
         'Quais os sinais do TEA?',
@@ -24,23 +24,23 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
     ]);
 
     useEffect(() => {
-        try {
-            setChat(createChat());
-            setMessages([
-                {
-                    role: 'model',
-                    text: 'Olá! Sou o assistente virtual do Instituto São Joaquim. Como posso te ajudar hoje sobre o Transtorno do Espectro Autista (TEA)?'
-                }
-            ]);
-        } catch (e: any) {
-            console.error("Falha ao inicializar o chatbot:", e);
-            setError("Desculpe, o assistente virtual está temporariamente indisponível. Por favor, tente novamente mais tarde.");
-        }
+        setChat(createChat());
+        setMessages([
+            {
+                role: 'model',
+                text: 'Olá! Sou o assistente virtual do Instituto São Joaquim. Como posso te ajudar hoje sobre o Transtorno do Espectro Autista (TEA)?'
+            }
+        ]);
     }, []);
     
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages, isLoading]);
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }, [messages]);
 
     const sendMessage = useCallback(async (messageText?: string) => {
         const currentInput = messageText || input;
@@ -51,35 +51,55 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
         }
 
         const userMessage: Message = { role: 'user', text: currentInput };
-        setMessages(prev => [...prev, userMessage]);
+        setMessages(prev => [...prev, userMessage, { role: 'model', text: '' }]);
+
         if (!messageText) {
             setInput('');
         }
         setIsLoading(true);
 
         try {
-            const result = await chat.sendMessage({ message: currentInput });
+            const streamResult = await chat.sendMessageStream({ message: currentInput });
             
-            const functionCalls = result.functionCalls;
-            const text = result.text;
+            let accumulatedText = '';
+            for await (const chunk of streamResult.stream) {
+                const chunkText = chunk.text;
+                if (chunkText) {
+                    accumulatedText += chunkText;
+                    setMessages(prev => {
+                        const newMessages = [...prev];
+                        newMessages[newMessages.length - 1].text = accumulatedText;
+                        return newMessages;
+                    });
+                }
+            }
 
+            const finalResponse = await streamResult.response;
+            const finalText = finalResponse.text;
+
+            setMessages(prev => {
+                const newMessages = [...prev];
+                const lastMessage = newMessages[newMessages.length - 1];
+                lastMessage.text = finalText || accumulatedText || 'Não consegui encontrar uma resposta. Pode tentar reformular a pergunta?';
+                return newMessages;
+            });
+            
+            const functionCalls = finalResponse.functionCalls;
             if (functionCalls && functionCalls.length > 0) {
-                const fc = functionCalls[0];
+                 await new Promise(resolve => setTimeout(resolve, 1000));
+                 const fc = functionCalls[0];
                 if (fc.name === 'navigateToSection') {
-                    if (text) {
-                        setMessages(prev => [...prev, { role: 'model', text }]);
-                        await new Promise(resolve => setTimeout(resolve, 1000));
-                    }
-                    
                     const { sectionId } = fc.args as { sectionId: string };
                     onNavigate(sectionId);
                 }
-            } else if (text) {
-                setMessages(prev => [...prev, { role: 'model', text }]);
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            setMessages(prev => [...prev, { role: 'model', text: 'Desculpe, ocorreu um erro. Por favor, tente novamente.' }]);
+            setMessages(prev => {
+                 const newMessages = [...prev];
+                 newMessages[newMessages.length - 1].text = 'Desculpe, ocorreu um erro. Por favor, tente novamente.';
+                 return newMessages;
+            });
         } finally {
             setIsLoading(false);
         }
@@ -102,50 +122,33 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
         <div className="fixed bottom-20 right-5 md:right-10 w-[calc(100%-2.5rem)] sm:w-96 h-[70vh] max-h-[600px] bg-white dark:bg-dark-bg-card rounded-2xl shadow-soft-xl flex flex-col z-50 animate-slide-in-up">
             <header className="bg-gradient-to-r from-primary to-primary-dark text-light p-4 flex justify-between items-center rounded-t-2xl">
                 <h3 className="font-bold text-lg">Assistente Inteligente</h3>
-                <button onClick={onClose} className="text-light/80 hover:text-white transition-opacity">
+                <button onClick={onClose} className="text-light/80 hover:text-white transition-opacity" aria-label="Fechar chat">
                     <XIcon className="w-6 h-6" />
                 </button>
             </header>
             
-            <div className="flex-1 p-4 overflow-y-auto bg-stone-50 dark:bg-dark-bg">
-                 {error ? (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="text-center text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 p-4 rounded-lg">
-                            <p className="font-semibold">Ocorreu um Erro</p>
-                            <p className="text-sm mt-1">{error}</p>
+            <div ref={chatContainerRef} className="flex-1 p-4 overflow-y-auto bg-stone-50 dark:bg-dark-bg">
+                <div className="space-y-4">
+                    {messages.map((msg, index) => (
+                        <div key={index} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'justify-end' : ''} animate-fade-in-up-subtle`}>
+                            {msg.role === 'model' && <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary-dark flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>}
+                            <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${msg.role === 'user' ? 'bg-secondary text-white rounded-br-none shadow-soft' : 'bg-white dark:bg-dark-bg-card text-dark dark:text-light rounded-bl-none shadow-soft'}`}>
+                               {msg.role === 'model' ? <MarkdownRenderer text={msg.text} /> : <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>}
+                               {isLoading && msg.role === 'model' && index === messages.length - 1 && !msg.text && (
+                                   <div className="flex items-center space-x-1.5 py-1">
+                                       <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-bounce" style={{ animationDelay: '0.1s' }}></span>
+                                       <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-bounce" style={{ animationDelay: '0.2s' }}></span>
+                                       <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-bounce" style={{ animationDelay: '0.3s' }}></span>
+                                   </div>
+                               )}
+                            </div>
+                            {msg.role === 'user' && <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-zinc-700 border border-stone-200 dark:border-zinc-600 flex-shrink-0 flex items-center justify-center"><UserCircleIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" /></div>}
                         </div>
-                    </div>
-                ) : (
-                    <>
-                        <div className="space-y-4">
-                            {messages.map((msg, index) => (
-                                <div key={index} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'justify-end' : ''}`}>
-                                    {msg.role === 'model' && <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary-dark flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>}
-                                    <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${msg.role === 'user' ? 'bg-secondary text-white rounded-br-none shadow-soft' : 'bg-white dark:bg-dark-bg-card text-dark dark:text-light rounded-bl-none shadow-soft'}`}>
-                                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                                    </div>
-                                    {msg.role === 'user' && <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-zinc-700 border border-stone-200 dark:border-zinc-600 flex-shrink-0 flex items-center justify-center"><UserCircleIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" /></div>}
-                                </div>
-                            ))}
-                             {isLoading && (
-                                <div className="flex items-start gap-3">
-                                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary-dark flex-shrink-0 flex items-center justify-center shadow-sm"><AiIcon className="w-5 h-5 text-white" /></div>
-                                    <div className="px-4 py-3 rounded-2xl bg-white dark:bg-dark-bg-card text-dark rounded-bl-none shadow-soft">
-                                        <div className="flex items-center space-x-1.5">
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-bounce" style={{ animationDelay: '0.1s' }}></span>
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-bounce" style={{ animationDelay: '0.2s' }}></span>
-                                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-typing-bounce" style={{ animationDelay: '0.3s' }}></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        <div ref={messagesEndRef} />
-                    </>
-                )}
+                    ))}
+                </div>
             </div>
 
-            {suggestions.length > 0 && !error && (
+            {suggestions.length > 0 && (
                 <div className="p-3 border-t bg-white dark:bg-dark-bg-card dark:border-zinc-700">
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">Sugestões:</p>
                     <div className="flex flex-wrap gap-2">
@@ -170,10 +173,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose, onNavigate }) => {
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder="Digite sua pergunta..."
-                        className="flex-1 px-4 py-2 border bg-stone-100 dark:bg-dark-bg dark:border-zinc-600 dark:text-light rounded-full focus:ring-2 focus:ring-secondary/50 focus:outline-none focus:bg-white dark:focus:bg-dark-bg transition-all"
-                        disabled={isLoading || !!error}
+                        className="flex-1 px-4 py-2 border bg-stone-100 dark:bg-dark-bg dark:text-light dark:border-zinc-600 dark:placeholder-stone-400 border border-stone-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary/50 focus:bg-white dark:focus:bg-dark-bg transition-all outline-none"
+                        disabled={isLoading}
                     />
-                    <button onClick={handleSendClick} disabled={isLoading || !input.trim() || !!error} className="bg-accent text-white p-3 rounded-full hover:bg-accent-dark disabled:bg-gray-300 dark:disabled:bg-zinc-600 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent">
+                    <button onClick={handleSendClick} disabled={isLoading || !input.trim()} className="bg-accent text-white p-3 rounded-full hover:bg-accent-dark disabled:bg-gray-300 dark:disabled:bg-zinc-600 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent" aria-label="Enviar mensagem">
                         <SendIcon className="w-5 h-5" />
                     </button>
                 </div>
