@@ -1,38 +1,52 @@
+
 import React from 'react';
 
-// A simple renderer for **bold** and * lists.
 const MarkdownRenderer: React.FC<{ text: string }> = ({ text }) => {
-    // Return empty if text is empty to avoid rendering empty divs
-    if (!text) {
-        return null;
-    }
+    if (!text) return null;
+
+    const processText = (input: string) => {
+        // Divide o texto em partes para processar negrito (**texto**) de forma segura
+        const parts = input.split(/(\*\*.*?\*\*)/g);
+        return parts.map((part, i) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={i} className="font-bold text-primary-dark dark:text-primary-light">{part.slice(2, -2)}</strong>;
+            }
+            return part;
+        });
+    };
 
     const renderContent = () => {
-        const blocks = text.split('\n\n'); // Split into paragraphs by double newline
+        // Divide o texto em blocos de parágrafo
+        const blocks = text.split('\n\n');
         
         return blocks.map((block, blockIndex) => {
             const lines = block.split('\n');
-            // Check if every non-empty line in the block is a list item
-            const isList = lines.filter(line => line.trim() !== '').every(line => line.trim().startsWith('* '));
+            const isList = lines.filter(l => l.trim() !== '').every(l => l.trim().startsWith('* '));
 
-            if (isList && lines.some(line => line.trim() !== '')) {
+            if (isList && lines.some(l => l.trim() !== '')) {
                 return (
                     <ul key={blockIndex} className="list-disc list-inside my-2 space-y-1">
-                        {lines.filter(line => line.trim() !== '').map((line, lineIndex) => {
+                        {lines.filter(l => l.trim() !== '').map((line, lineIndex) => {
                             const itemContent = line.trim().substring(2);
-                            const htmlContent = itemContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                            return <li key={lineIndex} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+                            return (
+                                <li key={lineIndex} className="text-sm">
+                                    {processText(itemContent)}
+                                </li>
+                            );
                         })}
                     </ul>
                 );
             } else {
-                const htmlContent = block.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />');
-                return <p key={blockIndex} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+                return (
+                    <p key={blockIndex} className="mb-2 last:mb-0 leading-relaxed">
+                        {processText(block)}
+                    </p>
+                );
             }
         });
     };
 
-    return <div className="text-sm leading-relaxed whitespace-normal">{renderContent()}</div>;
+    return <div className="text-sm leading-relaxed whitespace-pre-wrap">{renderContent()}</div>;
 };
 
 export default MarkdownRenderer;
